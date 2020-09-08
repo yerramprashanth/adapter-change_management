@@ -171,106 +171,42 @@ healthcheck(callback) {
   }
 
   /**
-       * @memberof ServiceNowAdapter
-       * @method getRecord
-       * @summary Get ServiceNow Record
-       * @description Retrieves a record from ServiceNow.
-       *
-       * @param {ServiceNowAdapter~requestCallback} callback - The callback that
-       *   handles the response.
-       */
-    getRecord(callback) {
-        /**
-       * Write the body for this function.
-       * The function is a wrapper for this.connector's get() method.
-       * Note how the object was instantiated in the constructor().
-       * get() takes a callback function.
-       */
-        //var abcd=undefined;
-        this.connector.get((results, error) => {
-            //return callback(results, error);
-            log.info("callback.result : " + JSON.stringify(results));
-            
-             if (results) {
-                 var response = results.body;
-                 
-                 var result = JSON.parse(response).result;
-                 
-            //     //log.info("callback.error : " + JSON.stringify(result));
-                 for (var j = 0; j < result.length; j++) {
-                     for (var key in result[j]) {
-                         if (result[j].hasOwnProperty(key)) {
-                            if (key === 'number') {
-                                result[j].change_ticket_number = result[j].number;
-                                log.info("result[j].change_ticket_number : " + result[j].change_ticket_number);
-                                delete result[j].number;
-                            } else if (key === 'sys_id') {
-                                result[j].change_ticket_key = result[j].sys_id;
-                                delete result[j].sys_id;
-                            } else if (key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end') {
-                                log.info("result[j]." + key + " : " + result[j].active);
-                                continue;
-                            } else {
-                                delete result[j][key];
-                            }
-                        }
-                     }
-                 }
-                 return callback(result, error);
-             } else {
-                 return callback(results, error);
-             }
-        });
-    }
-
-   /**
-     * @memberof ServiceNowAdapter
-     * @method postRecord
-     * @summary Create ServiceNow Record
-     * @description Creates a record in ServiceNow.
-     *
-     * @param {ServiceNowAdapter~requestCallback} callback - The callback that
-     *   handles the response.
+   * @memberof ServiceNowAdapter
+   * @method getRecord
+   * @summary Get ServiceNow Record
+   * @description Retrieves a record from ServiceNow.
+   *
+   * @param {ServiceNowAdapter~requestCallback} callback - The callback that
+   *   handles the response.
+   */
+  getRecord(callback) {
+    /**
+     * Write the body for this function.
+     * The function is a wrapper for this.connector's get() method.
+     * Note how the object was instantiated in the constructor().
+     * get() takes a callback function.
      */
-    postRecord(callback) {
-        /**
-         * Write the body for this function.
-         * The function is a wrapper for this.connector's post() method.
-         * Note how the object was instantiated in the constructor().
-         * post() takes a callback function.
-         */
-        var callOptions = {
-            url: this.props.url,
-            username: this.props.auth.username,
-            password: this.props.auth.password,
-            serviceNowTable: this.props.serviceNowTable
-        };
-        this.connector.post(callOptions, (results, error) => {
-            //return callback(results, error);
-            if (results) {
-                var response = results.body;
-                var result = JSON.parse(response).result;
+     this.connector.get(callback)
+  }
 
-                for (var key in result) {
-                    if (key === 'number') {
-                        result.change_ticket_number = result.number;
-                        delete result.number;
-                    } else if (key === 'sys_id') {
-                        result.change_ticket_key = result.sys_id;
-                        delete result.sys_id;
-                    } else if (!(key === 'active' || key === 'priority' || key === 'description' || key === 'work_start' || key === 'work_end')) {
-                        delete result[key];
-                    }
-                }
-
-                return callback(result, error);
-            } else {
-                return callback(results, error);
-            }
-
-        });
-
-    }
+  /**
+   * @memberof ServiceNowAdapter
+   * @method postRecord
+   * @summary Create ServiceNow Record
+   * @description Creates a record in ServiceNow.
+   *
+   * @param {ServiceNowAdapter~requestCallback} callback - The callback that
+   *   handles the response.
+   */
+  postRecord(callback) {
+    /**
+     * Write the body for this function.
+     * The function is a wrapper for this.connector's post() method.
+     * Note how the object was instantiated in the constructor().
+     * post() takes a callback function.
+     */
+      this.connector.post(callback)
+  }
 }
 
 module.exports = ServiceNowAdapter;
